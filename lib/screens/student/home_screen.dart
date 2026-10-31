@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../app/theme.dart';
+import 'my_reservations_screen.dart';
 import 'service_details_screen.dart';
 import 'trips_screen.dart';
 
@@ -114,6 +115,21 @@ class HomePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => const ServiceDetailsPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            sliver: SliverToBoxAdapter(
+              child: _MyReservationsCard(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MyReservationsPage(),
                     ),
                   );
                 },
@@ -489,6 +505,75 @@ class _ServiceInfo extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _MyReservationsCard extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _MyReservationsCard({
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      color: const Color(0xFFF5F8F9),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(
+          color: Color(0xFFE3E8EA),
+        ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: const Padding(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: Color(0xFFE3F3F4),
+                child: Icon(
+                  Icons.event_note_rounded,
+                  color: HammasirTheme.primary,
+                ),
+              ),
+              SizedBox(width: 13),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'رزروهای من',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'مشاهده و مدیریت رزروهای سرویس',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_left_rounded,
+                color: HammasirTheme.primary,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -46,3 +46,12 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Flutter/Android build artifacts
+**/build/
+
+# Local build/debug logs
+android/agp-response.txt
+android/gradle-debug.txt
+android/gradle-offline-log.txt
+build-result.txt

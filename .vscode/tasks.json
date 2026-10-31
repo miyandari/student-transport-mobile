@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🚀 اجرای هم‌مسیر",
+            "type": "shell",
+            "command": "${workspaceFolder:Flutter}\\.vscode\\start-dev.bat",
+            "options": {
+                "cwd": "${workspaceFolder:Flutter}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "focus": true,
+                "clear": false
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
