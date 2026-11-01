@@ -94,6 +94,19 @@ class _MyReservationsPageState
     }
   }
 
+  List<ReservationData> get _activeReservations {
+    return reservations.where((reservation) {
+      return reservation.status == 'active' ||
+          reservation.status == 'waitlisted';
+    }).toList();
+  }
+
+  List<ReservationData> get _cancelledReservations {
+    return reservations.where((reservation) {
+      return reservation.status == 'cancelled';
+    }).toList();
+  }
+
   bool _isActive(ReservationData reservation) {
     return reservation.status == 'active' ||
         reservation.status == 'waitlisted';
@@ -300,40 +313,158 @@ class _MyReservationsPageState
       );
     }
 
-    if (reservations.isEmpty) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(
+              16,
+              12,
+              16,
+              8,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F4F5),
+              borderRadius:
+                  BorderRadius.circular(14),
+            ),
+            child: TabBar(
+              indicatorSize:
+                  TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
+              indicator: BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x12000000),
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              labelColor:
+                  HammasirTheme.primary,
+              unselectedLabelColor:
+                  Colors.black54,
+              labelStyle:
+                  const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+              unselectedLabelStyle:
+                  const TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 13,
+              ),
+              padding: const EdgeInsets.all(4),
+              tabs: [
+                Tab(
+                  icon: Badge(
+                    isLabelVisible:
+                        _activeReservations
+                            .isNotEmpty,
+                    label: Text(
+                      _activeReservations
+                          .length
+                          .toString(),
+                    ),
+                    child: const Icon(
+                      Icons.event_available_rounded,
+                    ),
+                  ),
+                  text: 'رزروهای فعال',
+                ),
+                Tab(
+                  icon: Badge(
+                    isLabelVisible:
+                        _cancelledReservations
+                            .isNotEmpty,
+                    label: Text(
+                      _cancelledReservations
+                          .length
+                          .toString(),
+                    ),
+                    child: const Icon(
+                      Icons.event_busy_rounded,
+                    ),
+                  ),
+                  text: 'لغوشده‌ها',
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _buildReservationList(
+                  _activeReservations,
+                  emptyIcon:
+                      Icons.event_available_rounded,
+                  emptyTitle:
+                      'رزرو فعال ندارید',
+                  emptyDescription:
+                      'رزروهای تأییدشده و رزروهای موجود در صف انتظار در این قسمت نمایش داده می‌شوند.',
+                ),
+                _buildReservationList(
+                  _cancelledReservations,
+                  emptyIcon:
+                      Icons.event_busy_rounded,
+                  emptyTitle:
+                      'رزرو لغوشده‌ای ندارید',
+                  emptyDescription:
+                      'رزروهایی که لغو کرده‌اید در این قسمت نمایش داده می‌شوند.',
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReservationList(
+    List<ReservationData> items, {
+    required IconData emptyIcon,
+    required String emptyTitle,
+    required String emptyDescription,
+  }) {
+    if (items.isEmpty) {
       return RefreshIndicator(
         onRefresh: _loadReservations,
         child: ListView(
           physics:
               const AlwaysScrollableScrollPhysics(),
-          children: const [
-            SizedBox(height: 130),
+          children: [
+            const SizedBox(height: 110),
             Icon(
-              Icons.event_busy_rounded,
+              emptyIcon,
               size: 64,
               color: Colors.black26,
             ),
-            SizedBox(height: 18),
+            const SizedBox(height: 18),
             Center(
               child: Text(
-                'هنوز رزروی ثبت نکرده‌اید',
-                style: TextStyle(
+                emptyTitle,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Center(
               child: Padding(
                 padding:
-                    EdgeInsets.symmetric(
+                    const EdgeInsets.symmetric(
                   horizontal: 40,
                 ),
                 child: Text(
-                  'رزروهای سرویس‌های دانشجویی شما در این قسمت نمایش داده می‌شود.',
+                  emptyDescription,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black54,
                   ),
                 ),
@@ -351,14 +482,13 @@ class _MyReservationsPageState
             const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(
           16,
-          16,
+          8,
           16,
           30,
         ),
-        itemCount: reservations.length,
+        itemCount: items.length,
         itemBuilder: (context, index) {
-          final reservation =
-              reservations[index];
+          final reservation = items[index];
 
           final trip =
               tripsById[reservation.tripId];
@@ -547,7 +677,7 @@ class _ReservationCard
                   '#${reservation.tripId}',
             ),
             if (trip != null)
-              _DetailRow(
+              const _DetailRow(
                 icon:
                     Icons.location_on_outlined,
                 title: 'مقصد',

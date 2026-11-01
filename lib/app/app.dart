@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../screens/login/login_screen.dart';
 import '../screens/student/home_screen.dart';
-import '../screens/student/trips_screen.dart';
-import '../screens/student/notifications_screen.dart';
-import '../screens/student/profile_screen.dart';
 import 'theme.dart';
 import '../services/api_service.dart';
 
@@ -108,60 +105,11 @@ class _SplashPageState extends State<SplashPage> {
   }
 }
 
-class MainNavigation extends StatefulWidget {
+class MainNavigation extends StatelessWidget {
   const MainNavigation({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
-}
-
-class _MainNavigationState extends State<MainNavigation> {
-  int currentIndex = 0;
-
-  final pages = const [
-    HomePage(),
-    TripsPage(),
-    NotificationsPage(),
-    ProfilePage(),
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'خانه',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.directions_bus_outlined),
-            selectedIcon: Icon(Icons.directions_bus),
-            label: 'سفرها',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.notifications_none),
-            selectedIcon: Icon(Icons.notifications),
-            label: 'اعلان‌ها',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'پروفایل',
-          ),
-        ],
-      ),
-    );
+    return const HomePage();
   }
 }
